@@ -1,0 +1,74 @@
+{
+  "animations": [
+    [
+      "singLEFT",
+      "BF NOTE LEFT",
+      [],
+      24,
+      false,
+      [
+        -3,
+        2
+      ]
+    ],
+    [
+      "singDOWN",
+      "BF NOTE DOWN",
+      [],
+      24,
+      false,
+      [
+        -15,
+        18
+      ]
+    ],
+    [
+      "singUP",
+      "BF NOTE UP",
+      [],
+      24,
+      false,
+      [
+        0,
+        4
+      ]
+    ],
+    [
+      "singRIGHT",
+      "BF NOTE RIGHT",
+      [],
+      24,
+      false,
+      [
+        -1,
+        7
+      ]
+    ],
+    [
+      "idle",
+      "BF idle dance",
+      [],
+      24,
+      false,
+      [
+        0,
+        0
+      ]
+    ]
+  ],
+  "position": [
+    -340,
+    80
+  ],
+  "camera_points": [
+    240,
+    -40
+  ],
+  "flip_x": true,
+  "icon": "bf",
+  "sprite": "characters/BFP",
+  "antialiasing": true,
+  "sing_duration": 6.1,
+  "scale": 1.2,
+  "nativelyPlayable": true
+}

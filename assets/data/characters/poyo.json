@@ -1,0 +1,73 @@
+{
+  "animations": [
+    [
+      "singLEFT",
+      "poyo swag left",
+      [],
+      24,
+      false,
+      [
+        0,
+        0
+      ]
+    ],
+    [
+      "singDOWN",
+      "poyo swag down",
+      [],
+      24,
+      false,
+      [
+        0,
+        0
+      ]
+    ],
+    [
+      "singUP",
+      "poyo swag up",
+      [],
+      24,
+      false,
+      [
+        0,
+        0
+      ]
+    ],
+    [
+      "singRIGHT",
+      "poyo swag right",
+      [],
+      24,
+      false,
+      [
+        0,
+        0
+      ]
+    ],
+    [
+      "idle",
+      "poyo swag idle",
+      [],
+      24,
+      false,
+      [
+        0,
+        0
+      ]
+    ]
+  ],
+  "position": [
+    -150,
+    -89
+  ],
+  "camera_points": [
+    0,
+    0
+  ],
+  "flip_x": false,
+  "icon": "dad",
+  "sprite": "characters/poyo",
+  "antialiasing": true,
+  "sing_duration": 6.1,
+  "scale": 1
+}

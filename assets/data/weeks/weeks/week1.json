@@ -1,0 +1,15 @@
+{
+  "name": "Daddy Dearest",
+  "songs": [
+    "Summer Sunset",
+    "Energizer",
+    "Epic"
+  ],
+  "characters": [
+    "dad",
+    "bf",
+    "gf"
+  ],
+  "sprite": "week1",
+  "locked": false
+}
