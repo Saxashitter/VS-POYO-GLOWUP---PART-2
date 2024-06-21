@@ -27,39 +27,34 @@ jobs:
         with:
           name: ${{ env.CORE_LOVE_ARTIFACT_NAME }}
           path: ${{ env.CORE_LOVE_PACKAGE_PATH }}
-  build-windows:
-    runs-on: windows-latest
+  build:
+    runs-on: ubuntu-latest
     needs: [build-core]
-    env:
-      OUTPUT_FOLDER: ./build
     steps:
-      - uses: actions/checkout@v3
-        with:
-          submodules: recursive
-      # Download your core love package here
-      - name: Download core love package
-        uses: actions/download-artifact@v3
-        with:
-          name: ${{ env.CORE_LOVE_ARTIFACT_NAME }}
-      - name: Build Windows packages
-        id: build-packages
-        uses: love-actions/love-actions-windows@v1
-        with:
-          love-package: ${{ env.CORE_LOVE_PACKAGE_PATH }}
-          icon-path: ./.github/build/windows/${{ env.BUILD_TYPE }}/icon.ico
-          rc-path: ./.github/build/windows/${{ env.BUILD_TYPE }}/template.rc
-          product-name: ${{ env.PRODUCT_NAME }}
-          output-folder: ${{ env.OUTPUT_FOLDER }}
-      - name: Upload 32-bit artifact
-        uses: actions/upload-artifact@v3
-        with:
-          name: ${{ needs.get-info.outputs.base-name }}_Windows_x86
-          path: ${{ env.OUTPUT_FOLDER }}/${{ env.PRODUCT_NAME }}_x86.zip
-      - name: Upload 64-bit artifact
-        uses: actions/upload-artifact@v3
-        with:
-          name: ${{ needs.get-info.outputs.base-name }}_Windows_x64
-          path: ${{ env.OUTPUT_FOLDER }}/${{ env.PRODUCT_NAME }}_x64.zip
+    - uses: actions/checkout@v3
+    - uses: nhartland/love-build@master
+      id: love-build
+      with:
+        app_name: 'VS_POYO'
+        love_version: '11.4'
+    - uses: actions/upload-artifact@v1
+      with:
+        name: macos-build
+        path: ${{ steps.love-build.outputs.macos-filename }}
+    - uses: actions/upload-artifact@v1
+      with:
+       name: win32-build
+       path: ${{ steps.love-build.outputs.win32-filename }}
+    - uses: actions/upload-artifact@v1
+      with:
+       name: win64-build
+       path: ${{ steps.love-build.outputs.win64-filename }}
+   - uses: actions/upload-artifact@v1
+     with:
+       name: love-build
+       path: ${{ steps.love-build.outputs.love-filename }}
+
+
   build-android:
     runs-on: ubuntu-latest
     needs: [build-core]

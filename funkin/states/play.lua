@@ -567,7 +567,7 @@ function PlayState:step(s)
 		if math.abs(time - PlayState.conductor.time / 1000) > 0.015 * rate then
 			PlayState.conductor.time = time * 1000
 		end
-		local maxDelay, vocals = 0.0088 * rate
+		local maxDelay, vocals = 0.004 * rate
 		for _, notefield in ipairs(self.notefields) do
 			vocals = notefield.vocals
 			if vocals and vocals:isPlaying()
