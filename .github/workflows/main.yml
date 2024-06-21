@@ -62,11 +62,6 @@ jobs:
           import re
           with open(os.getenv('GITHUB_OUTPUT'), 'a') as f:
             f.write('product-name=' + re.sub(r'[^A-Za-z0-9]+', '_', '${{ needs.get-info.outputs.app-name }}') + '\n')
-      - uses: ./.github/actions/update-version
-        if: ${{ !startsWith(github.ref, 'refs/tags/v') }}
-        with:
-          commit: ${{ needs.get-info.outputs.commit-hash }}
-          type: snapshot
       - name: Build core love package
         uses: love-actions/love-actions-core@v1
         with:
