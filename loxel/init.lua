@@ -11,7 +11,9 @@ local isMobile = love.system.getDevice() == "Mobile"
 
 if Project.flags.LoxelInitWindow then
 	love.window.setTitle(Project.title)
-	love.window.setIcon(love.image.newImageData(Project.icon))
+	if not isFused then
+		love.window.setIcon(love.image.newImageData(Project.icon))
+	end
 	love.window.setMode(Project.width, Project.height, {fullscreen = isMobile, resizable = not isMobile, vsync = 0, usedpiscale = false})
 
 	if Project.bgColor then
@@ -25,7 +27,7 @@ function love.filesystem.isRestricted()
 end
 
 -- unrestrict the filesystem
-if love.filesystem.isFused() or not love.filesystem.getInfo("assets") then
+--[[if love.filesystem.isFused() or not love.filesystem.getInfo("assets") then
 	if love.filesystem.mountFullPath then
 		love.filesystem.mountFullPath(love.filesystem.getSourceBaseDirectory(), "")
 	elseif not isMobile then
@@ -54,7 +56,7 @@ if love.filesystem.isFused() or not love.filesystem.getInfo("assets") then
 	else
 		restrictedfs = true
 	end
-end
+end]]
 
 -- NOTE, no matter how precision is, in windows 10 as of now (<=love 11)
 -- will be always 12ms, unless its using SDL3 or CREATE_WAITABLE_TIMER_HIGH_RESOLUTION flag

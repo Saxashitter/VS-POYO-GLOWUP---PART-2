@@ -3,8 +3,6 @@ local Project = require "project"
 function love.conf(t)
 	t.identity = Project.package
 	t.console = Project.DEBUG_MODE
-	t.gammacorrect = false
-	t.highdpi = false
 
 	--[[ Vulkan is buggy atm
 		1. Makes inputs delayed for whatever reason

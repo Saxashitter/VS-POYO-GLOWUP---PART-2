@@ -1,0 +1,26 @@
+1 VERSIONINFO
+FILEVERSION @FileVersion
+PRODUCTVERSION @FileVersion
+FILEOS 0x40004
+FILETYPE 0x1
+{
+    BLOCK "StringFileInfo"
+    {
+        BLOCK "040904B0"
+        {
+            VALUE "CompanyName", "Saxashitter"
+            VALUE "FileDescription", "VS Poyo Indev"
+            VALUE "FileVersion", "@Version"
+            VALUE "InternalName", "VS Poyo"
+            VALUE "LegalCopyright", "i forgor"
+            VALUE "OriginalFilename", "VSPoyo.exe"
+            VALUE "ProductName", "VSPoyo"
+            VALUE "ProductVersion", "@Version"
+        }
+    }
+
+    BLOCK "VarFileInfo"
+    {
+        VALUE "Translation", 0x0409 0x04E4
+    }
+}
