@@ -261,7 +261,7 @@ jobs:
 
   build-windows:
     runs-on: windows-latest
-    needs: [get-info, build-core, auto-test]
+    needs: [get-info, build-core]
     env:
       OUTPUT_FOLDER: ./build
       RELEASE_FOLDER: ./release
