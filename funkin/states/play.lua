@@ -55,6 +55,7 @@ local function _returnAllPossibleNotes(type)
 		end
 	end
 
+	print(type.." "..count)
 	return count
 end
 
@@ -68,10 +69,6 @@ function PlayState.loadSong(song, diff)
 end
 
 function PlayState:new(storyMode, song, diff)
-	if song == nil then
-		song = "Epic"
-		diff = "normal"
-	end
 	PlayState.super.new(self)
 
 	if storyMode ~= nil then
@@ -347,8 +344,8 @@ function PlayState:enter()
 	local oppNotes = _returnAllPossibleNotes("enemy")
 	local plyrNotes = _returnAllPossibleNotes("player")
 
-	self.oppScoreMult = (400*oppNotes)/1000000
-	self.plyrScoreMult = (400*plyrNotes)/1000000
+	self.oppScoreMult = 100000/(oppNotes*400)
+	self.plyrScoreMult = 100000/(plyrNotes*400)
 
 	self.ratings = {
 		{name = "perfect", time = 0.026, score = 400, splash = true,  mod = 1},
@@ -1123,7 +1120,7 @@ function PlayState:miss(note, dir)
 end
 
 function PlayState:recalculateRating(rating, opp)
-	self.scoreText.content = "Score:" .. math.floor(self.score) .. " // Opponent Score: " .. math.floor(self.opponentScore)
+	self.scoreText.content = "Score:" .. math.floor(self.score) .. "\nOpponent Score: " .. math.floor(self.opponentScore)
 	if rating then
 		local field = rating .. "s"
 		self[field] = (self[field] or 0) + 1
