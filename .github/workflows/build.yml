@@ -10,7 +10,7 @@ env:
   CORE_LOVE_ARTIFACT_NAME: poyoGame
   PRODUCT_NAME: VSPoyo
   BUNDLE_ID: com.saxashitter.ufpatrf
-  
+
 jobs:
   build-core:
     runs-on: ubuntu-latest
