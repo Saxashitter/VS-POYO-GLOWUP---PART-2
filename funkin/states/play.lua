@@ -138,6 +138,8 @@ function PlayState:enter()
 	self.playback = 1
 	Timer.setSpeed(1)
 
+	self.scripts:set("state", self)
+
 	self.scripts:set("bpm", PlayState.conductor.bpm)
 	self.scripts:set("crotchet", PlayState.conductor.crotchet)
 	self.scripts:set("stepCrotchet", PlayState.conductor.stepCrotchet)

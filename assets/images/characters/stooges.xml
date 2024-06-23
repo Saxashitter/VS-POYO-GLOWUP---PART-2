@@ -1,0 +1,8 @@
+<?xml version='1.0' encoding='utf-8'?>
+<TextureAtlas imagePath="stooges.png">
+<SubTexture name="stooges idle0000" x="2014" y="668" width="1021" height="665" frameX="-120" frameY="-490" frameWidth="1280" frameHeight="1280" />
+<SubTexture name="stooges idle0001" x="2014" y="0" width="1027" height="668" frameX="-115" frameY="-487" frameWidth="1280" frameHeight="1280" />
+<SubTexture name="stooges idle0002" x="0" y="0" width="1017" height="677" frameX="-118" frameY="-478" frameWidth="1280" frameHeight="1280" />
+<SubTexture name="stooges idle0003" x="1017" y="0" width="997" height="677" frameX="-125" frameY="-477" frameWidth="1280" frameHeight="1280" />
+<SubTexture name="stooges idle0004" x="0" y="677" width="991" height="677" frameX="-128" frameY="-477" frameWidth="1280" frameHeight="1280" />
+</TextureAtlas>

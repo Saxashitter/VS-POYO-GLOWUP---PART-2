@@ -66,9 +66,7 @@ function Dialogue:new(chars, dialogue)
 
 	self.textbox = Graphic(0,game.height/2,game.width,game.height/2)
 
-	self.text = TypeText(16, (game.height/2)+16, "Nothing.", paths.getFont("vcr.ttf", 16), {1,1,1,0}, "left", (game.width-16)/3)
-	self.text.scale.x = 3
-	self.text.scale.y = 3
+	self.text = TypeText(16, (game.height/2)+8, "Nothing.", paths.getFont("vcr.ttf", 32), {1,1,1,0}, "left", (game.width-16))
 	self.text.onAddLetter = function(s)
 		if not self.curChar then return end
 

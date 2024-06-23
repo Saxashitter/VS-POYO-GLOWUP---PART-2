@@ -1,0 +1,1 @@
+{"animations": [["idle", "stooges idle", [], 12, false, [0, 0]]], "antialiasing": true, "sprite": "characters/stooges", "position": [-400, -470], "icon": "test", "flip_x": false, "camera_points": [-150, 80], "sing_duration": 4, "scale": 0.999999999999999}

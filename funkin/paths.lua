@@ -183,6 +183,18 @@ function paths.getSparrowAtlas(key)
 	end
 	return nil
 end
+function paths.getUFAtlas(key)
+	local imgPath, jsonPath = key, paths.getPath("images/" .. key .. ".json")
+	local obj = paths.atlases[paths.getPath("images/" .. key)]
+	if obj then return obj end
+	img = paths.getImage(imgPath)
+	if img and paths.exists(jsonPath, "file") then
+		obj = Sprite.getFramesFromUF(img, decodeJson(readFile(jsonPath)))
+		paths.atlases[paths.getPath("images/" .. key)] = obj
+		return obj
+	end
+	return nil
+end
 
 function paths.getPackerAtlas(key)
 	local imgPath, txtPath = key, paths.getPath("images/" .. key .. ".txt")

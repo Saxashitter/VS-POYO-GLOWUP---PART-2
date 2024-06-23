@@ -7,6 +7,7 @@ function postCreate()
 
 	music = game.sound.load(paths.getMusic('dialogue/week1'))
 	music:fade(1, 0, ClientPrefs.data.menuMusicVolume / 100)
+	music:setLooping(true)
 	music:play()
 
 	local chars = {

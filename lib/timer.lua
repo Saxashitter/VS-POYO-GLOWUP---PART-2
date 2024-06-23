@@ -226,6 +226,7 @@ local function def_tween(func)
 
 		back = function(s, bounciness)
 			bounciness = bounciness or 1.70158
+			bounciness = bounciness or 1.70158/6
 			return s * s * ((bounciness + 1) * s - bounciness)
 		end,
 

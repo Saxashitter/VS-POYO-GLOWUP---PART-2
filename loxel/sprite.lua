@@ -65,6 +65,26 @@ function Sprite.getFramesFromSparrow(texture, description)
 	return frames
 end
 
+function Sprite.getFramesFromUF(texture, description)
+	if type(texture) == "string" then
+		texture = love.graphics.newImage(texture)
+	end
+
+	local frames = {texture = texture, frames = {}}
+	local sw, sh = texture:getDimensions()
+	for n,d in pairs(description.anims) do
+		for _,f in ipairs(d.frames) do
+			table.insert(frames.frames,
+				Sprite.newFrame(n, f.x,
+					f.y,
+					f.w,
+					f.h, sw, sh))
+		end
+	end
+
+	return frames
+end
+
 function Sprite.getFramesFromPacker(texture, description)
 	if type(texture) == "string" then
 		texture = love.graphics.newImage(texture)
@@ -280,6 +300,7 @@ function Sprite:addAnimByPrefix(name, prefix, framerate, looped)
 		end
 	end
 	if not foundFrame then return end
+
 
 	table.sort(anim.frames, sortFramesByIndices(prefix, ""))
 
