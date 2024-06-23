@@ -52,6 +52,11 @@ function TypeText:addLetter(i)
 	self.timer = 0
 	self.index = self.index + i
 
+	-- for bonus stuff:
+	if self.onAddLetter then
+		self:onAddLetter(i)
+	end
+
 	local actualTarget = self:getWrappedContent()
 	self.content = string.sub(actualTarget, 1, self.index)
 	if self.sound then game.sound.play(self.sound) end

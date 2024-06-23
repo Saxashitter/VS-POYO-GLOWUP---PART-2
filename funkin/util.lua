@@ -71,6 +71,13 @@ function util.playMenuMusic(fade)
 		if fade then game.sound.music:fade(4, 0, ClientPrefs.data.menuMusicVolume / 100) end
 	end
 end
+function util.safePlayMusic(menu, fade)
+	if not game.sound.music or not game.sound.music:isPlaying() or game.sound.music.__source ~= menu then
+		if game.sound.music then game.sound.music:reset(true) end
+		game.sound.playMusic(menu, fade and 0 or ClientPrefs.data.menuMusicVolume / 100)
+		if fade then game.sound.music:fade(4, 0, ClientPrefs.data.menuMusicVolume / 100) end
+	end
+end
 
 function util.playSfx(asset, volume, ...)
 	return game.sound.play(asset, (volume or 1) * ClientPrefs.data.sfxVolume / 100, ...)

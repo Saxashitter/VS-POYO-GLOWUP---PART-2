@@ -50,12 +50,12 @@ local function _returnAllPossibleNotes(type)
 
 	for _,n in ipairs(PlayState.SONG.notes[type]) do
 		local sustainTime = n.l or 0
-		if sustainTime == 0 then
+		--[[if sustainTime == 0 then
 			count = count + 1
-		end
+		end]]
+		count = count + 1
 	end
 
-	print(type.." "..count)
 	return count
 end
 
@@ -1136,6 +1136,10 @@ function PlayState:popUpScore(rating, opp)
 		judgeSprites.comboNumVisible = not event.hideScore
 		judgeSprites:spawn(rating, not opp and self.combo or false)
 	end
+end
+
+function PlayState:tryDialogue()
+	local event = self.scripts:call('dialogue')
 end
 
 function PlayState:tryPause()

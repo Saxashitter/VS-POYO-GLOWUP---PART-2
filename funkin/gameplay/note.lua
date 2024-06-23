@@ -45,11 +45,15 @@ function Note:new(time, direction, sustainTime, skin)
 end
 
 function Note:randomizeHitPos()
-	if self.sustainTime > 0 then return end
-	self.time = self.time + math.random(-_hitRange*1.5, _hitRange)
+	local randResult = love.math.randomNormal(-_hitRange, _hitRange)
+	self.time = self.time + randResult
 
 	-- i got no idea whats going on but it likes to fuck itself over
 	self.time = math.max(self.displayTime-_hitbox, math.min(self.time, self.displayTime+_hitbox))
+
+	if self.sustainTime > 0 then
+		self.sustainTime = self.sustainTime - randResult
+	end
 end
 
 function Note:fixRandom()
@@ -66,7 +70,7 @@ function Note:clone()
 	clone.ignoreNote, clone.priority, clone.type = self.ignoreNote, self.priority, self.type
 	clone.earlyHitMult, clone.lateHitMult, clone.hit = self.earlyHitMult, self.lateHitMult, self.hit
 	clone.speed, clone.sustainSegments = self.speed, self.sustainSegments
-	clone.displayTime = self.displayTime
+	clone.displayTime, clone.displaySustainTime = self.displayTime, self.displaySustainTime
 
 	return clone
 end
@@ -164,6 +168,7 @@ end
 function Note:setSustainTime(sustainTime)
 	if sustainTime == self.sustainTime then return end
 	self.sustainTime = sustainTime
+	self.displaySustainTime = sustainTime
 
 	if sustainTime > 0.01 then return self:createSustain() end
 	return self:destroySustain()
@@ -297,7 +302,7 @@ function Note:__render(camera)
 		local blendMode, alphaMode = love.graphics.getBlendMode()
 
 		local fov, drawSize, drawSizeOffset = self.fov, grp and grp.drawSize or 800, grp and grp.drawSizeOffset or 0
-		local suspos, minbound, maxbound = Note.toPos(time + self.sustainTime - target, speed),
+		local suspos, minbound, maxbound = Note.toPos(time + self.displaySustainTime - target, speed),
 			self.pressed and 0 or self.lastPress and Note.toPos(self.lastPress - target, speed) or math.max(pos, -drawSize / 2 + drawSizeOffset - ny),
 			drawSize / 2 + drawSizeOffset - ny
 

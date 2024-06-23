@@ -4,7 +4,7 @@
       "singLEFT",
       "poyo swag left",
       [],
-      24,
+      20,
       false,
       [
         0,
@@ -15,7 +15,7 @@
       "singDOWN",
       "poyo swag down",
       [],
-      24,
+      20,
       false,
       [
         0,
@@ -26,7 +26,7 @@
       "singUP",
       "poyo swag up",
       [],
-      24,
+      20,
       false,
       [
         0,
@@ -37,7 +37,7 @@
       "singRIGHT",
       "poyo swag right",
       [],
-      24,
+      20,
       false,
       [
         0,
@@ -48,7 +48,7 @@
       "idle",
       "poyo swag idle",
       [],
-      24,
+      20,
       false,
       [
         0,
