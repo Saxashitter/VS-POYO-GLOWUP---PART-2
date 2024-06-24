@@ -110,7 +110,10 @@ function TitleState:update(dt)
 		self.titleText:play("press")
 		util.playSfx(paths.getSound("confirmMenu"))
 		game.camera:flash(Color.WHITE, 1.5)
-		Timer.after(1.5, function() game.switchState(MainMenuState()) end)
+		Timer.after(1.5, function()
+			stickers = StickersSubstate(MainMenuState())
+			self:openSubstate(stickers)
+		end)
 	end
 	self:updateEnterColor()
 

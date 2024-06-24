@@ -715,6 +715,9 @@ function PlayState:doCountdown(beat)
 end
 
 function PlayState:resetStroke(notefield, dir, doPress)
+	if not notefield then return end
+	dir = dir or 0
+	doPress = (doPress)
 	local receptor = notefield.receptors[dir + 1]
 	if receptor then
 		receptor:play((doPress and not notefield.bot)
@@ -1013,7 +1016,7 @@ function PlayState:goodNoteHit(note, time, blockAnimation)
 
 		local rating = self:getRating(note.time, time)
 		if self.playerNotefield ~= notefield then -- ITS NOT THE PLAYER, FAKE THAT SHIT
-			rating = self:getRating(note.displayTime, time)
+			rating = self:getRating(note.time, note.displayTime)
 		end
 
 		local receptor = notefield.receptors[fixedDir]

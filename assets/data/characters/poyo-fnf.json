@@ -1,1 +1,73 @@
-{"animations": [["idle", "poyo_boppin", [], 24, false, [0, 0]], ["singLEFT", "poyo_left", [], 24, false, [120, -11]], ["singDOWN", "poyo_down", [], 24, false, [10, -20]], ["singUP", "poyo_up", [], 24, false, [40, 90]], ["singRIGHT", "poyo_right", [], 24, false, [18, 6]]], "antialiasing": true, "sprite": "characters/PoyoFNF", "position": [0, 110], "icon": "face", "flip_x": false, "camera_points": [0, 0], "sing_duration": 4.00000000000001, "scale": 1}
+{
+  "animations": [
+    [
+      "idle",
+      "poyo_boppin",
+      [],
+      24,
+      false,
+      [
+        0,
+        0
+      ]
+    ],
+    [
+      "singLEFT",
+      "poyo_left",
+      [],
+      24,
+      false,
+      [
+        120,
+        -11
+      ]
+    ],
+    [
+      "singDOWN",
+      "poyo_down",
+      [],
+      24,
+      false,
+      [
+        10,
+        -20
+      ]
+    ],
+    [
+      "singUP",
+      "poyo_up",
+      [],
+      24,
+      false,
+      [
+        40,
+        90
+      ]
+    ],
+    [
+      "singRIGHT",
+      "poyo_right",
+      [],
+      24,
+      false,
+      [
+        18,
+        6
+      ]
+    ]
+  ],
+  "antialiasing": true,
+  "sprite": "characters/PoyoFNF",
+  "position": [
+    0,
+    110
+  ],
+  "icon": "poyo",
+  "flip_x": false,
+  "camera_points": [
+    0,
+    0
+  ],
+  "sing_duration": 4.00000000000001,
+  "scale": 1
+}

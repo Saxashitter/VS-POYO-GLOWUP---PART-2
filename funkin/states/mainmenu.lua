@@ -108,6 +108,12 @@ function MainMenuState:enter()
 
 	self:changeSelection()
 
+	if stickers then
+		local closure = StickersSubstate(self, stickers)
+		self:openSubstate(closure)
+		stickers = nil
+	end
+
 	self.script:call("postCreate")
 end
 

@@ -1,5 +1,5 @@
 function create()
-	self.camZoom = 0.35
+	self.camZoom = 0.5
 
 	local bg = Sprite(-1000, -600):loadTexture(
 		paths.getImage(SCRIPT_PATH .. "bg"))

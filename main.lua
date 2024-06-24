@@ -72,6 +72,7 @@ PlayState = require "funkin.states.play"
 EditorMenu = require "funkin.ui.editor.editormenu"
 
 GameOverSubstate = require "funkin.substates.gameover"
+StickersSubstate = require "funkin.substates.stickers"
 
 CutsceneState = require "funkin.states.editors.cutscene"
 CharacterEditor = require "funkin.states.editors.character"
