@@ -1,0 +1,4 @@
+<?xml version='1.0' encoding='utf-8'?>
+<TextureAtlas imagePath="poyo_gf.png">
+<SubTexture name="jumbo0000" x="0" y="0" width="584" height="453" frameX="0" frameY="0" frameWidth="0" frameHeight="0" />
+</TextureAtlas>

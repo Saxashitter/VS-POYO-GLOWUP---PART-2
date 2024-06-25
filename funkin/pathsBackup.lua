@@ -150,7 +150,6 @@ function paths.getFont(key, size)
 end
 
 function paths.getImage(key)
-	key = "jumbo"
 	local path = paths.getPath("images/" .. key .. ".png")
 	local obj = paths.images[path]
 	if obj then return obj end

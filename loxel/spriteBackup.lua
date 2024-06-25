@@ -51,14 +51,14 @@ function Sprite.getFramesFromSparrow(texture, description)
 	for _, c in ipairs(parseXml(description).TextureAtlas.children) do
 		if c.name == "SubTexture" then
 			table.insert(frames.frames,
-				Sprite.newFrame(c.attrs.name, tonumber(0),
-					tonumber(0),
-					tonumber(584),
-					tonumber(453), sw, sh,
-					tonumber(0),
-					tonumber(0),
-					tonumber(0),
-					tonumber(0)))
+				Sprite.newFrame(c.attrs.name, tonumber(c.attrs.x),
+					tonumber(c.attrs.y),
+					tonumber(c.attrs.width),
+					tonumber(c.attrs.height), sw, sh,
+					tonumber(c.attrs.frameX),
+					tonumber(c.attrs.frameY),
+					tonumber(c.attrs.frameWidth),
+					tonumber(c.attrs.frameHeight)))
 		end
 	end
 
