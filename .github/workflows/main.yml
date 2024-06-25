@@ -206,7 +206,6 @@ jobs:
         with:
           build_dir: ./.github/build/web/
           keep_history: false
-          target_branch: web-dev
       - name: Upload artifact
         uses: actions/upload-artifact@v3
         with:
