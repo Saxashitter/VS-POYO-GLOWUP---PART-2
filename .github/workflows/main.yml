@@ -2,7 +2,7 @@ name: Other Builds
 
 on:
   push:
-    branches: [main, ci*]
+    branches: [main]
     tags: [pre*, v*]
   pull_request:
     branches: [main]
