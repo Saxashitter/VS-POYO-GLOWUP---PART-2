@@ -2,7 +2,7 @@ return {
 	DEBUG_MODE = true,
 	splashScreen = true,
 
-	title = "FNF: VS POYO",
+	title = "VS Poyo",
 	file = "VSPoyo",
 	icon = "art/icon.png",
 	version = "2.0",
