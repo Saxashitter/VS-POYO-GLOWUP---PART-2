@@ -1,4 +1,4 @@
-name: Techmino CI
+name: Other Builds
 
 on:
   push:
