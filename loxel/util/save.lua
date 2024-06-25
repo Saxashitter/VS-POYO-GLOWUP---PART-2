@@ -18,6 +18,7 @@ function Save.init(name)
 			Save.data = json.decode(decodeData)
 		end
 	else
+		error(love.system.getOS())
 		Save.path = love.filesystem.getAppdataDirectory() .. '/' .. Project.company .. '/' .. Project.file
 		local filePath = Save.path .. '/' .. name .. '.lox'
 		local dataFile = io.open(filePath, "rb")
