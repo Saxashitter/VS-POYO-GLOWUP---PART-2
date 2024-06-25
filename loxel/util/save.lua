@@ -17,8 +17,15 @@ function Save.init(name)
 			local decodeData = love.data.decode("string", "hex", dataFile)
 			Save.data = json.decode(decodeData)
 		end
+	elseif love.system.getOS() == "Web" then
+		Save.path = "save"
+		local filePath = Save.path..'/'..name..'.lox'
+		local dataExists = love.filesystem.getInfo(filePath, "file")
+		if dataExists then
+			local decodeData = love.data.decode("string", "hex", love.filesystem.read(filePath))
+			Save.data = json.decode(decodeData)
+		end
 	else
-		error(love.system.getOS())
 		Save.path = love.filesystem.getAppdataDirectory() .. '/' .. Project.company .. '/' .. Project.file
 		local filePath = Save.path .. '/' .. name .. '.lox'
 		local dataFile = io.open(filePath, "rb")
@@ -34,6 +41,8 @@ function Save.bind(name)
 	local encodeData = love.data.encode("string", "hex", json.encode(Save.data))
 	if love.system.getDevice() == "Mobile" then
 		love.filesystem.write(name .. '.lox', encodeData)
+	elseif love.system.getOS() == "Web" then
+		love.filesystem.write("save/" .. name .. '.lox', encodeData)
 	else
 		local filePath = Save.path .. '/' .. name .. '.lox'
 		local dirCheck = io.open(filePath, "wb")
