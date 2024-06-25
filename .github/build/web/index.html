@@ -1,111 +1,139 @@
 <!doctype html>
 <html lang="en-us">
-  <head>
-    <meta charset="utf-8">
-    <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no, minimum-scale=1, maximum-scale=1">
-    <title>Techmino</title>
+    <head>
+        <meta charset="utf-8">
+        <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no, minimum-scale=1, maximum-scale=1">
+        <title>VS Poyo</title>
 
-    <!-- Load custom style sheet -->
-    <link rel="stylesheet" type="text/css" href="theme/love.css">
-  </head>
-  <body>
-    <center>
-      <div>
-        <h1>Techmino</h1>
-        <canvas id="loadingCanvas" oncontextmenu="event.preventDefault()" width="800" height="600"></canvas>
-        <canvas id="canvas" oncontextmenu="event.preventDefault()"></canvas>
-      </div>
-    </center>
+        <!-- Load custom style sheet -->
+        <link rel="stylesheet" type="text/css" href="theme/love.css">
+    </head>
+    <body>
+        <div id="container" class="love-desktop">
+            <canvas id="canvas" oncontextmenu="event.preventDefault()"></canvas>
+            <div id='message-container'>
+                <div id='message'>Message</div>
+                <div id='progress-border'><div id='progress-bar'></div></div>
+            </div>
+            <div id="footer">
+                <div id="logo">Powered by <a href="https://github.com/love2d/love">LÖVE</a></div>
+                <div id="fullscreen-button" onclick="goFullScreen();">Fullscreen</div>
+            </div>
+        </div>
 
-    <script type='text/javascript'>
-      function goFullScreen(){
-            var canvas = document.getElementById("canvas");
-            if(canvas.requestFullScreen)
-                canvas.requestFullScreen();
-            else if(canvas.webkitRequestFullScreen)
-                canvas.webkitRequestFullScreen();
-            else if(canvas.mozRequestFullScreen)
-                canvas.mozRequestFullScreen();
-      }
-      function FullScreenHook(){
-        var canvas = document.getElementById("canvas");
-        canvas.width = window.innerWidth || document.documentElement.clientWidth || document.body.clientWidth;
-        canvas.height = window.innerHeight || document.documentElement.clientHeight || document.body.clientHeight;
-      }
-      var loadingContext = document.getElementById('loadingCanvas').getContext('2d');
-      function drawLoadingText(text) {
-        var canvas = loadingContext.canvas;
+        <script type='text/javascript'>
+            var container = document.querySelector("#container");
+            var canvas = document.querySelector("#canvas");
+            var footer = document.querySelector("#footer");
+            var progress_bar = document.querySelector("#progress-bar");
 
-        loadingContext.fillStyle = "rgb(142, 195, 227)";
-        loadingContext.fillRect(0, 0, canvas.scrollWidth, canvas.scrollHeight);
+            var complete = false;
 
-        loadingContext.font = '2em arial';
-        loadingContext.textAlign = 'center'
-        loadingContext.fillStyle = "rgb( 11, 86, 117 )";
-        loadingContext.fillText(text, canvas.scrollWidth / 2, canvas.scrollHeight / 2);
+            function goFullScreen() {
+                if(canvas.requestFullScreen)
+                    canvas.requestFullScreen();
+                else if(canvas.webkitRequestFullScreen)
+                    canvas.webkitRequestFullScreen();
+                else if(canvas.mozRequestFullScreen)
+                    canvas.mozRequestFullScreen();
+            }
 
-        loadingContext.fillText("Powered By Emscripten.", canvas.scrollWidth / 2, canvas.scrollHeight / 4);
-        loadingContext.fillText("Powered By LÖVE.", canvas.scrollWidth / 2, canvas.scrollHeight / 4 * 3);
-      }
+            // function FullScreenHook() {
+            //     var canvas = document.getElementById("canvas");
+            //     canvas.width = window.innerWidth || document.documentElement.clientWidth || document.body.clientWidth;
+            //     canvas.height = window.innerHeight || document.documentElement.clientHeight || document.body.clientHeight;
+            // }
 
-      window.onload = function () { window.focus(); };
-      window.onclick = function () { window.focus(); };
+            function drawMessage(text) {
+                message.innerHTML = text;
+            }
 
-      window.addEventListener("keydown", function(e) {
-        // space and arrow keys
-        if([32, 37, 38, 39, 40].indexOf(e.keyCode) > -1) {
-          e.preventDefault();
-        }
-      }, false);
+            function drawLoadingStatus(text, current_value, total_value) {
+                var ratio = complete ? 1 : 0;
+                if (current_value && total_value) {
+                    ratio = current_value / total_value;
+                }
+                if (ratio >= 1) {
+                    complete = true;
+                }
 
-      var Module = {
-        arguments: ["./game.love"],
-        INITIAL_MEMORY: 536870912,
-        printErr: console.error.bind(console),
-        canvas: (function() {
-          var canvas = document.getElementById('canvas');
+                progress_bar.style.width = (ratio * 100) + '%';
+                drawMessage(text);
+            }
 
-          // As a default initial behavior, pop up an alert when webgl context is lost. To make your
-          // application robust, you may want to override this behavior before shipping!
-          // See http://www.khronos.org/registry/webgl/specs/latest/1.0/#5.15.2
-          canvas.addEventListener("webglcontextlost", function(e) { alert('WebGL context lost. You will need to reload the page.'); e.preventDefault(); }, false);
+            window.onload = function () { 
+                window.focus();
+            };
+            window.onclick = function () { 
+                window.focus();
+            };
 
-          return canvas;
-        })(),
-        setStatus: function(text) {
-          if (text) {
-            drawLoadingText(text);
-          } else if (Module.remainingDependencies === 0) {
-            document.getElementById('loadingCanvas').style.display = 'none';
-            document.getElementById('canvas').style.visibility = 'visible';
-          }
-        },
-        totalDependencies: 0,
-        remainingDependencies: 0,
-        monitorRunDependencies: function(left) {
-          this.remainingDependencies = left;
-          this.totalDependencies = Math.max(this.totalDependencies, left);
-          Module.setStatus(left ? 'Preparing... (' + (this.totalDependencies-left) + '/' + this.totalDependencies + ')' : 'All downloads complete.');
-        }
-      };
-      Module.setStatus('Downloading...');
-      window.onerror = function(event) {
-        // TODO: do not warn on ok events like simulating an infinite loop or exitStatus
-        Module.setStatus('Exception thrown, see JavaScript console');
-        Module.setStatus = function(text) {
-          if (text) Module.printErr('[post-exception status] ' + text);
-        };
-      };
+            window.onerror = function(event) {
+                canvas.remove();
+                // TODO: do not warn on ok events like simulating an infinite loop or exitStatus
+                drawMessage('An error has occurred, see JavaScript console');
+                Module.setStatus = function(text) {
+                    if (text) Module.printErr('[post-exception status] ' + text);
+                };
+            };
 
-      var applicationLoad = function(e) {
-        Love(Module);
-      }
-    </script>
-    <script type="text/javascript" src="game.js"></script>
-    <script async type="text/javascript" src="love.js" onload="applicationLoad(this)"></script>
-    <footer>
-      <p>Built with <a href="https://github.com/Davidobot/love.js">love.js</a> <button onclick="goFullScreen();">Go Fullscreen</button><br>Hint: Reload the page if screen is blank</p>
-    </footer>
-  </body>
+            window.addEventListener("keydown", function(e) {
+                // space and arrow keys
+                if([32, 37, 38, 39, 40].indexOf(e.keyCode) > -1) {
+                    e.preventDefault();
+                }
+            }, false);
+
+            if (/iPhone|iPad|iPod|Android/i.test(navigator.userAgent)) {
+                footer.className = "love-mobile";
+                container.className = "love-mobile";
+
+                function resize_canvas() {
+                    var innerWidth = window.innerWidth;
+		            var innerHeight = window.innerHeight;
+
+                    var width = canvas.width;
+                    var height = canvas.height;
+                    var targetRatio = width / height;
+                    var actualRatio = innerWidth / innerHeight;
+
+                    var margin_left = "0px";
+                    var margin_top = "0px";
+                
+                    if (innerWidth < width || innerHeight < height) {
+                        if (actualRatio > targetRatio) {
+                            width = innerHeight * targetRatio;
+                            height = innerHeight;
+                            margin_left = ((innerWidth - width) / 2) + "px";
+                        }
+                        else {
+                            width = innerWidth;
+                            height = innerWidth / targetRatio;
+                            margin_top = ((innerHeight - height) / 2) + "px";
+                        }
+                    }
+                    else {
+                        margin_left = ((innerWidth - width) / 2) + "px";
+                        margin_top = ((innerHeight - height) / 2) + "px";
+                    }
+
+                    canvas.style.width = width + "px";
+                    canvas.style.height = height + "px";
+
+                    container.style.width = width + "px";
+		            container.style.height = height + "px";
+                    container.style.marginLeft = margin_left;
+                    container.style.marginTop = margin_top;
+                }
+
+                resize_canvas();
+                window.addEventListener('resize', resize_canvas, false);
+                window.addEventListener('orientationchange', resize_canvas, false);
+                window.addEventListener('focus', resize_canvas, false);
+            }
+        </script>
+        <script type="text/javascript" src="game.js"></script>
+        <script async type="text/javascript" src="love.js" onload="applicationLoad(this)"></script>
+    </body>
 </html>
