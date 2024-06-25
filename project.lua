@@ -5,7 +5,7 @@ return {
 	title = "FNF: VS POYO",
 	file = "VSPoyo",
 	icon = "art/icon.png",
-	version = "0.7.0",
+	version = "2.0",
 	package = "com.saxashitter.vspoyo",
 	width = 1280,
 	height = 720,
