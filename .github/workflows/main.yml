@@ -65,7 +65,6 @@ jobs:
       - name: Build core love package
         uses: love-actions/love-actions-core@v1
         with:
-          build-list: ./main.lua ./conf.lua ./project.lua ./version.lua ./README.md ./LICENSE ./assets ./funkin ./lib ./loxel ./art
           package-path: ${{ env.CORE_LOVE_PACKAGE_PATH }}
       - name: Upload core love package
         uses: actions/upload-artifact@v3
@@ -198,7 +197,7 @@ jobs:
           name: ${{ env.CORE_LOVE_ARTIFACT_NAME }}
       - name: Move core love package
         run: |
-          mv ${{ env.CORE_LOVE_PACKAGE_PATH }} ./.github/build/web/game.data
+          mv ${{ env.CORE_LOVE_PACKAGE_PATH }} ./.github/build/web/game.love
       - name: Deploy to GitHub Pages
         uses: crazy-max/ghaction-github-pages@v3
         env:
