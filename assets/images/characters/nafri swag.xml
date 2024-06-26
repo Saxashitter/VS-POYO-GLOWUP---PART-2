@@ -1,0 +1,28 @@
+<?xml version='1.0' encoding='utf-8'?>
+<TextureAtlas imagePath="nafri swag.png">
+<SubTexture name="nafri swag idle0000" x="369" y="1501" width="382" height="723" frameX="-317" frameY="-201" frameWidth="978" frameHeight="1103" />
+<SubTexture name="nafri swag idle0001" x="1530" y="1501" width="371" height="717" frameX="-321" frameY="-207" frameWidth="978" frameHeight="1103" />
+<SubTexture name="nafri swag idle0002" x="1161" y="1501" width="369" height="719" frameX="-321" frameY="-205" frameWidth="978" frameHeight="1103" />
+<SubTexture name="nafri swag idle0003" x="0" y="1501" width="369" height="725" frameX="-321" frameY="-199" frameWidth="978" frameHeight="1103" />
+<SubTexture name="nafri swag idle0004" x="1735" y="733" width="370" height="727" frameX="-320" frameY="-197" frameWidth="978" frameHeight="1103" />
+<SubTexture name="nafri swag left0000" x="784" y="0" width="566" height="742" frameX="-116" frameY="-182" frameWidth="978" frameHeight="1103" />
+<SubTexture name="nafri swag left0001" x="0" y="764" width="541" height="737" frameX="-142" frameY="-187" frameWidth="978" frameHeight="1103" />
+<SubTexture name="nafri swag left0002" x="541" y="764" width="537" height="735" frameX="-146" frameY="-189" frameWidth="978" frameHeight="1103" />
+<SubTexture name="nafri swag left0003" x="1735" y="0" width="492" height="733" frameX="-196" frameY="-191" frameWidth="978" frameHeight="1103" />
+<SubTexture name="nafri swag left0004" x="1735" y="733" width="370" height="727" frameX="-320" frameY="-197" frameWidth="978" frameHeight="1103" />
+<SubTexture name="nafri swag down0000" x="0" y="2226" width="398" height="638" frameX="-327" frameY="-273" frameWidth="978" frameHeight="1103" />
+<SubTexture name="nafri swag down0001" x="2227" y="1420" width="376" height="657" frameX="-328" frameY="-254" frameWidth="978" frameHeight="1103" />
+<SubTexture name="nafri swag down0002" x="2690" y="1400" width="373" height="660" frameX="-328" frameY="-251" frameWidth="978" frameHeight="1103" />
+<SubTexture name="nafri swag down0003" x="2690" y="708" width="362" height="692" frameX="-329" frameY="-218" frameWidth="978" frameHeight="1103" />
+<SubTexture name="nafri swag down0004" x="1735" y="733" width="370" height="727" frameX="-320" frameY="-197" frameWidth="978" frameHeight="1103" />
+<SubTexture name="nafri swag up0000" x="0" y="0" width="395" height="764" frameX="-296" frameY="-160" frameWidth="978" frameHeight="1103" />
+<SubTexture name="nafri swag up0001" x="395" y="0" width="389" height="743" frameX="-301" frameY="-181" frameWidth="978" frameHeight="1103" />
+<SubTexture name="nafri swag up0002" x="1350" y="0" width="385" height="740" frameX="-304" frameY="-184" frameWidth="978" frameHeight="1103" />
+<SubTexture name="nafri swag up0003" x="1078" y="764" width="374" height="734" frameX="-316" frameY="-190" frameWidth="978" frameHeight="1103" />
+<SubTexture name="nafri swag up0004" x="1735" y="733" width="370" height="727" frameX="-320" frameY="-197" frameWidth="978" frameHeight="1103" />
+<SubTexture name="nafri swag right0000" x="2690" y="0" width="509" height="708" frameX="-332" frameY="-216" frameWidth="978" frameHeight="1103" />
+<SubTexture name="nafri swag right0001" x="2227" y="0" width="463" height="710" frameX="-332" frameY="-214" frameWidth="978" frameHeight="1103" />
+<SubTexture name="nafri swag right0002" x="2227" y="710" width="445" height="710" frameX="-332" frameY="-214" frameWidth="978" frameHeight="1103" />
+<SubTexture name="nafri swag right0003" x="751" y="1501" width="410" height="720" frameX="-328" frameY="-204" frameWidth="978" frameHeight="1103" />
+<SubTexture name="nafri swag right0004" x="1735" y="733" width="370" height="727" frameX="-320" frameY="-197" frameWidth="978" frameHeight="1103" />
+</TextureAtlas>

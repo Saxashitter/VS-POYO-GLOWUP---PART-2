@@ -1,0 +1,101 @@
+{
+  "animations": [
+    [
+      "idle",
+      "nafri swag idle",
+      [],
+      12,
+      false,
+      [
+        0,
+        -20
+      ]
+    ],
+    [
+      "singDOWN",
+      "nafri swag down",
+      [
+        0,
+        1,
+        2,
+        2,
+        3,
+        4
+      ],
+      12,
+      false,
+      [
+        0,
+        -20
+      ]
+    ],
+    [
+      "singUP",
+      "nafri swag up",
+      [
+        0,
+        1,
+        2,
+        2,
+        3,
+        4
+      ],
+      12,
+      false,
+      [
+        -7,
+        -19
+      ]
+    ],
+    [
+      "singRIGHT",
+      "nafri swag right",
+      [
+        0,
+        1,
+        2,
+        2,
+        3,
+        4
+      ],
+      12,
+      false,
+      [
+        7,
+        -16
+      ]
+    ],
+    [
+      "singLEFT",
+      "nafri swag left",
+      [
+        0,
+        1,
+        2,
+        2,
+        3,
+        4
+      ],
+      12,
+      false,
+      [
+        2,
+        -21
+      ]
+    ]
+  ],
+  "antialiasing": true,
+  "sprite": "characters/nafri swag",
+  "position": [
+    -280,
+    -150
+  ],
+  "icon": "nafri",
+  "flip_x": false,
+  "camera_points": [
+    10,
+    -120
+  ],
+  "sing_duration": 7,
+  "scale": 1.05
+}
