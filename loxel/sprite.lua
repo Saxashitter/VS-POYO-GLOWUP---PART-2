@@ -30,8 +30,24 @@ end
 local Sprite = Object:extend("Sprite")
 
 function Sprite.newFrame(name, x, y, w, h, sw, sh, ox, oy, ow, oh)
+	local project = require "project"
+	local scale = 1
+	if project.downsizeImages then
+		scale = 2
+		--[[x = x/2
+		y = y/2
+		w = w/2
+		h = h/2]]
+		sw = sw and sw*2
+		sh = sh and sh*2
+		--[[ox = ox and ox/2
+		oy = oy and oy/2
+		ow = ow and ow/2
+		oh = oh and oh/2]]
+	end
 	local aw, ah = x + w, y + h
 	return {
+		scale = scale,
 		name = name,
 		quad = love.graphics.newQuad(x, y, aw > sw and w - (aw - sw) or w,
 			ah > sh and h - (ah - sh) or h, sw, sh),
@@ -385,6 +401,7 @@ function Sprite:finish()
 end
 
 function Sprite:setFrames(frames)
+	local project = require "project"
 	self.__frames = frames.frames
 	self.texture = frames.texture
 
@@ -495,6 +512,7 @@ function Sprite:_canDraw()
 end
 
 function Sprite:__render(camera)
+	local project = require "project"
 	local r, g, b, a = love.graphics.getColor()
 	local shader = self.shader and love.graphics.getShader()
 	local blendMode, alphaMode = love.graphics.getBlendMode()
@@ -530,6 +548,10 @@ function Sprite:__render(camera)
 	if f then
 		love.graphics.draw(self.texture, f.quad, x, y, rad, sx, sy, ox, oy)
 	else
+		if project.downsizeImages then
+			sx = sx*2
+			sy = sy*2
+		end
 		love.graphics.draw(self.texture, x, y, rad, sx, sy, ox, oy)
 	end
 

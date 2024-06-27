@@ -3,7 +3,7 @@ return {
 	splashScreen = true,
 
 	-- optimization options
-	downsizeImages = true,
+	downsizeImages = false,
 	useMP3s = false,
 
 	title = "VS Poyo",

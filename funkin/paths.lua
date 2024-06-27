@@ -150,7 +150,11 @@ function paths.getFont(key, size)
 end
 
 function paths.getImage(key)
+	local project = require "project"
 	local path = paths.getPath("images/" .. key .. ".png")
+	if project.downsizeImages then
+		path = paths.getPath("images/" .. key .. "-dsb2.png")
+	end
 	local obj = paths.images[path]
 	if obj then return obj end
 	if paths.exists(path, "file") then
