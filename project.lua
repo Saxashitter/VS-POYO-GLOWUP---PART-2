@@ -2,6 +2,10 @@ return {
 	DEBUG_MODE = true,
 	splashScreen = true,
 
+	-- optimization options
+	downsizeImages = true,
+	useMP3s = false,
+
 	title = "VS Poyo",
 	file = "VSPoyo",
 	icon = "art/icon.png",
