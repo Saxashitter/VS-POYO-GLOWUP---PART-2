@@ -310,10 +310,15 @@ function Note:__render(camera)
 		local vertLens = math.min(2 + segments * 2, 16)
 
 		if vertLens > 2 then
+			local project = require "project"
 			local susend, gotVerts = self.sustainEnd
 			if susend and suspos >= minbound and suspos < maxbound then
 				local snx, sny, snz, ssc, tex = susend.x + nx, susend.y + ny, (susend.z or 0) + nz, susend.scale, susend.texture
 				local f, tw, th = susend:getCurrentFrame(), tex:getWidth(), tex:getHeight()
+				if project.downsizeImages then
+					tw = tw*2
+					th = th*2
+				end
 				local hfw, fh, uvx, uvy, uvxw, uvh = tw, th, 0, 0, 1, 1
 				if f then
 					uvx, uvy, hfw, fh = f.quad:getViewport()
@@ -373,6 +378,10 @@ function Note:__render(camera)
 			if suspos >= minbound then
 				local snx, sny, snz, ssc, tex = sus.x + nx, sus.y + ny, (sus.z or 0) + nz, sus.scale, sus.texture
 				local f, tw, th = sus:getCurrentFrame(), tex:getWidth(), tex:getHeight()
+				if project.downsizeImages then
+					tw = tw*2
+					th = th*2
+				end
 				local hfw, fh, uvx, uvy, uvxw, uvh = tw, th, 0, 0, 1, 1
 				if f then
 					uvx, uvy, hfw, fh = f.quad:getViewport()

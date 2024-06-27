@@ -3,7 +3,7 @@ return {
 	splashScreen = true,
 
 	-- optimization options
-	downsizeImages = false,
+	downsizeImages = (love._os and love._os == "3DS"),
 	useMP3s = false,
 
 	title = "VS Poyo",

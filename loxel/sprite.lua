@@ -528,11 +528,20 @@ function Sprite:__render(camera)
 		self.scale.x * self.zoom.x, self.scale.y * self.zoom.y,
 		self.origin.x, self.origin.y
 
+	if not f
+	and project.downsizeImages then
+		sx = (self.scale.x*2)*self.zoom.x
+		sy = (self.scale.y*2)*self.zoom.y
+	end
+
+	local ofx = self.offset.x
+	local ofy = self.offset.y
+
 	if self.flipX then sx = -sx end
 	if self.flipY then sy = -sy end
 
-	x, y = x + ox - self.offset.x - (camera.scroll.x * self.scrollFactor.x),
-		y + oy - self.offset.y - (camera.scroll.y * self.scrollFactor.y)
+	x, y = x + ox - ofx - (camera.scroll.x * self.scrollFactor.x),
+		y + oy - ofy - (camera.scroll.y * self.scrollFactor.y)
 
 	if f then ox, oy = ox + f.offset.x, oy + f.offset.y end
 
@@ -548,10 +557,6 @@ function Sprite:__render(camera)
 	if f then
 		love.graphics.draw(self.texture, f.quad, x, y, rad, sx, sy, ox, oy)
 	else
-		if project.downsizeImages then
-			sx = sx*2
-			sy = sy*2
-		end
 		love.graphics.draw(self.texture, x, y, rad, sx, sy, ox, oy)
 	end
 

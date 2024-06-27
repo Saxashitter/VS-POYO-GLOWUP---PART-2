@@ -221,7 +221,12 @@ function love.update(dt)
 	if controls:pressed("fullscreen") then love.window.setFullscreen(not love.window.getFullscreen()) end
 end
 
-function love.draw()
+function love.draw(screen)
+	if screen
+	and screen == "bottom" then
+		return
+	end
+
 	game.draw()
 end
 

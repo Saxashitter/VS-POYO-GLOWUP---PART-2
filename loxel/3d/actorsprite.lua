@@ -144,6 +144,7 @@ function ActorSprite:_canDraw()
 end
 
 function ActorSprite:__render(camera)
+	local project = require "project"
 	local r, g, b, a = love.graphics.getColor()
 	local shader = love.graphics.getShader()
 	local blendMode, alphaMode = love.graphics.getBlendMode()
@@ -155,6 +156,7 @@ function ActorSprite:__render(camera)
 
 	local f = self:getCurrentFrame()
 
+
 	local x, y, z, rx, ry, rz, sx, sy, sz, ox, oy, oz =
 		self.x - self.offset.x - (camera.scroll.x * self.scrollFactor.x),
 		self.y - self.offset.y - (camera.scroll.y * self.scrollFactor.y),
@@ -163,13 +165,31 @@ function ActorSprite:__render(camera)
 		self.scale.x * self.zoom.x, self.scale.y * self.zoom.y, self.scale.z * self.zoom.z,
 		self.origin.x, self.origin.y, self.origin.z
 
+	--[[if project.downsizeImages then
+		sx = sx*2
+		sy = sy*2
+		sz = sz*2
+	end]]
+
 	x, y = x + ox, y + oy
 
 	local tw, th = self.texture:getWidth(), self.texture:getHeight()
+	if project.downsizeImages then
+		tw = tw*2
+		th = th*2
+	end
 	local fw, fh, uvx, uvy, uvw, uvh = tw, th, 0, 0, 1, 1
 	if f then
 		ox, oy = ox + f.offset.x, oy + f.offset.y
 		uvx, uvy, fw, fh = f.quad:getViewport()
+		--[[if project.downsizeImages then
+			ox = ox/2
+			oy = oy/2
+			uvx = uvx/2
+			uvy = uvy/2
+			fw = fw/2
+			fh = fh/2
+		end]]
 		uvx, uvy, uvw, uvh = uvx / tw, uvy / th, fw / tw, fh / th
 	end
 	fw, fh, ox, oy, oz = fw * sx, fh * sy, ox * sx, oy * sy, oz * sz
