@@ -53,6 +53,7 @@ function API.chart.parse(song, diff, returnRaw)
 	parsedData.song = chart.song or meta.songName or song:capitalize()
 	parsedData.bpm = chart.bpm or 100
 	parsedData.speed = chart.speed or 1
+	parsedData.sceneInFP = (chart.sceneInFP)
 
 	parsedData.artist = meta.artist
 	parsedData.charter = meta.charter
@@ -132,7 +133,8 @@ function API.chart.readDiff(bpm, data, isV1)
 			if s and s.sectionNotes then
 				for _, n in ipairs(s.sectionNotes) do
 					local col, time, length, type = tonumber(n[2]), tonumber(n[1]),
-						tonumber(n[3]) or 0, tonumber(n[4]) or 0 -- ?
+						tonumber(n[3]) or 0, n[4]
+						
 					local hit = s.mustHitSection
 					if col > 3 then hit = not hit end
 

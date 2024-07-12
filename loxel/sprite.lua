@@ -420,12 +420,16 @@ function Sprite:getCurrentFrame()
 	return nil
 end
 
+
+
 function Sprite:getFrameWidth()
+	local project = require "project"
 	local f = self:getCurrentFrame()
 	return f and f.width or self.texture and self.texture:getWidth()
 end
 
 function Sprite:getFrameHeight()
+	local project = require "project"
 	local f = self:getCurrentFrame()
 	return f and f.height or self.texture and self.texture:getHeight()
 end
@@ -454,6 +458,7 @@ function Sprite:setGraphicSize(width, height)
 end
 
 function Sprite:updateHitbox()
+	local project = require "project"
 	local width, height = self:getFrameDimensions()
 
 	self.width = math.abs(self.scale.x * self.zoom.x) * width
@@ -530,6 +535,16 @@ function Sprite:__render(camera)
 
 	if not f
 	and project.downsizeImages then
+		if self.texture
+		and self.__fixSpriteDSThing then
+			local sfx = self.scrollFactor.x
+			local sfy = self.scrollFactor.y
+			local x_add = self.texture:getWidth()/2
+			local y_add = self.texture:getHeight()/2
+
+			x = x+x_add
+			y = y+y_add
+		end
 		sx = (self.scale.x*2)*self.zoom.x
 		sy = (self.scale.y*2)*self.zoom.y
 	end

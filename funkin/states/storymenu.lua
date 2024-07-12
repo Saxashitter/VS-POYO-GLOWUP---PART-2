@@ -239,7 +239,8 @@ function StoryMenuState:selectWeek()
 		local diff = (leWeek.difficulties and leWeek.difficulties[StoryMenuState.curDifficulty] or
 			self.diffs[StoryMenuState.curDifficulty])
 
-		local toState = PlayState(true, songTable, diff)
+		-- local toState = PlayState(true, songTable, diff, {})
+		local toState = CharacterSelectState(true, songTable, PlayState(true, songTable, "normal", {}))
 		PlayState.storyWeek = leWeek.name
 		PlayState.storyWeekFile = leWeek.file
 

@@ -19,7 +19,7 @@ end
 local _hitRange = 0.138*0.25
 local _hitbox = 0.1
 
-function Note:new(time, direction, sustainTime, skin)
+function Note:new(time, direction, sustainTime, skin, type)
 	Note.init()
 	Note.super.new(self)
 	self.ignoreAffectByGroup = true
@@ -34,10 +34,18 @@ function Note:new(time, direction, sustainTime, skin)
 	self.tooLate, self.ignoreNote, self.lastPress = false, false, false, false, nil
 	self.priority, self.earlyHitMult, self.lateHitMult = 0, 1, 1
 	self.showNote, self.showNoteOnHit = true, false
-	self.type = ""
+	self.type = type or ""
 	self.group = nil
 
 	self.sustainSegments = Note.defaultSustainSegments
+
+	if self.type == "Hurt Note" then
+		self.alpha = 0.4
+		self.damageOnHit = true
+	elseif self.type == "Hey!" then
+		print "can hey lols"
+		self.heyOnHit = true
+	end
 
 	self.direction, self.data = direction, direction -- data is for backward compatibilty
 	self:setSkin(skin)

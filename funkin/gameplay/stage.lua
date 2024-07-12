@@ -24,6 +24,10 @@ function Stage:new(name)
 		self.script:set("self", self)
 
 		self.script:call("create")
+		
+		for _,i in pairs(self.members) do
+			i.__fixSpriteDSThing = true
+		end
 	end
 end
 

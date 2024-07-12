@@ -4,25 +4,40 @@ local Graphic = require "loxel.graphic"
 local TypeText = require "loxel.typetext"
 
 local offsetData = {
-	['bf-poyo'] = {
-		x = -550,
-		y = -100
-	};
 	['poyo'] = {
-		x = -150,
-		y = -40
+		x = 0,
+		y = 0,
+		scale = 0.5,
 	}
 }
 
 local function _characterBop(self, c)
 	if not c then return end
 
-	c:dance()
-
 	local data = offsetData[c.char] or {x = 0, y = 0}
 
 	c.y = data.y + 15
 	self.timer:tween(0.2, c, {y = data.y}, "out-cubic")
+end
+
+local function loadDialogueSprite(x,y,char,flip)
+	local sprite = Sprite(x,y)
+	sprite:setFrames(paths.getSparrowAtlas("dialogue/" .. char))
+
+	sprite:addAnimByPrefix("neutral", "neutral", 1)
+	sprite:addAnimByPrefix("scared", "scared", 1)
+	sprite:addAnimByPrefix("mad", "mad", 1)
+	sprite:addAnimByPrefix("sad", "sad", 1)
+	sprite:addAnimByPrefix("with rizz", "with rizz", 1)
+
+	if offsetData[char]
+	and offsetData[char].scale then
+		sprite.scale = {x = offsetData[char].scale, y = offsetData[char].scale}
+		sprite:updateHitbox()
+	end
+
+	sprite.char = char
+	return sprite
 end
 
 function Dialogue:new(chars, dialogue)
@@ -43,25 +58,24 @@ function Dialogue:new(chars, dialogue)
 	self.chars = {}
 	for _,data in pairs(chars) do
 		self.chars[data.tag] = {
-			char = Character(0,0,data.char),
+			spr = loadDialogueSprite(0,0,data.char),
 			side = data.side
 		}
 	end
 
 	for _,i in pairs(self.chars) do
-		local data = offsetData[i.char.char] or {x = 0, y = 0}
+		local data = offsetData[i.spr.char] or {x = 0, y = 0}
 
 		local ox = data.x
 		local oy = data.y
 		if i.side == "right" then
-			local f = i.char:getCurrentFrame()
+			local f = i.spr:getCurrentFrame()
 			ox = game.width-f.width-ox
-			i.char.flipX = not i.char.flipX
+			i.spr.flipX = not i.spr.flipX
 		end
 	
-		i.char:setPosition(ox, oy)
-		i.char:updateHitbox()
-		i.char._holdTime = i.char.holdTime -- since we cant use crotchet, we gotta do smth else
+		i.spr:setPosition(ox, oy)
+		i.spr:updateHitbox()
 	end
 
 	self.textbox = Graphic(0,game.height/2,game.width,game.height/2)
@@ -77,7 +91,7 @@ function Dialogue:new(chars, dialogue)
 
 	self:add(self.background)
 	for _,c in pairs(self.chars) do
-		self:add(c.char)
+		self:add(c.spr)
 	end
 	self:add(self.textbox)
 	self:add(self.text)
@@ -114,11 +128,14 @@ function Dialogue:switchDialogue()
 	local target = self.chars[nextLine.tag]
 	for _,c in pairs(self.chars) do
 		if c ~= target then
-			c.char.visible = false
+			c.spr.visible = false
 		else
 			self.curChar = c
-			c.char.visible = true
-			_characterBop(self, c.char)
+			c.spr.visible = true
+			if nextLine.anim then
+				c.spr:play(nextLine.anim)
+			end
+			_characterBop(self, c.spr)
 		end
 	end
 
@@ -135,19 +152,6 @@ function Dialogue:update(dt)
 	if controls:pressed("accept") then
 		local line = self:switchDialogue()
 		if not line then return end
-	end
-	
-	local c = self.curChar
-
-	if c
-	and c.char
-	and c.char._holdTime
-	and c.char._holdTime > 0 then
-		c.char._holdTime = math.max(0, c.char._holdTime - (dt*10))
-
-		if c.char._holdTime == 0 then
-			c.char:dance()
-		end
 	end
 end
 

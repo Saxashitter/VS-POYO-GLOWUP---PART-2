@@ -4,6 +4,7 @@
     "stage": "alley",
     "player1": "poyo-fnf",
     "player2": "whitty",
+    "sceneInFP": true,
     "notes": [
       {
         "gfSection": false,

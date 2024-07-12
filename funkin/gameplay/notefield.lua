@@ -56,8 +56,8 @@ function Notefield:makeLane(direction, y)
 	return lane
 end
 
-function Notefield:makeNote(time, col, sustain, skin)
-	local note = Note(time, col, sustain, skin or self.skin)
+function Notefield:makeNote(time, col, sustain, skin, type)
+	local note = Note(time, col, sustain, skin or self.skin, type)
 	return note, self:addNote(note)
 end
 
@@ -122,6 +122,57 @@ function Notefield:setSkin(skin)
 	end
 end
 
+local function canHitNote(note, time)
+	local safeZoneOffset = Note.safeZoneOffset
+	local noteTime = note.displayTime
+	local tm = 1
+
+	if note.damageOnHit then
+		tm = 0.5
+	end
+
+	return noteTime > time - ((safeZoneOffset * note.lateHitMult)*tm)
+		and noteTime < time + ((safeZoneOffset * note.earlyHitMult)*tm)
+end
+
+local function canHitNextNote(notes, i, time)
+	local prevNote
+	local nextNote
+
+	local _i = i
+	while not prevNote do
+		if not notes[_i-1] then break end
+
+		if notes[_i-1].direction == notes[i].direction
+		and not notes[_i-1].damageOnHit then
+			prevNote = notes[_i-1]
+			break
+		end
+		_i = _i + 1
+	end
+	local _i = i
+	while not prevNote do
+		if not notes[_i+1] then break end
+
+		if notes[_i+1].direction == notes[i].direction
+		and not notes[_i+1].damageOnHit then
+			nextNote = notes[_i+1]
+			break
+		end
+		_i = _i + 1
+	end
+
+	if prevNote
+	and canHitNote(prevNote, time) then
+		return true
+	end
+	if nextNote
+	and canHitNote(nextNote, time) then
+		return true
+	end
+	return false
+end
+
 function Notefield:getNotes(time, direction, sustainLoop)
 	local notes = self.notes
 	if #notes == 0 then return {} end
@@ -129,13 +180,13 @@ function Notefield:getNotes(time, direction, sustainLoop)
 	local safeZoneOffset, hitNotes, i, started, hasSustain,
 	forceHit, noteTime, hitTime, prev, prevIdx = Note.safeZoneOffset, {}, 1
 	for _, note in ipairs(notes) do
-		noteTime = note.time
+		noteTime = note.displayTime
 		if not note.tooLate
 			and not note.ignoreNote
 			and (direction == nil or note.direction == direction)
 			and (note.lastPress
-				or (noteTime > time - safeZoneOffset * note.lateHitMult
-					and noteTime < time + safeZoneOffset * note.earlyHitMult)) then
+				or canHitNote(note, time))
+			and not (note.damageOnHit and canHitNextNote(notes, i, time)) then
 			forceHit = sustainLoop and not note.wasGoodSustainHit and note.sustain
 			if forceHit then hasSustain = true end
 			if not note.wasGoodHit or forceHit then

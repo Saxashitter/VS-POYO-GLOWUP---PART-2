@@ -69,7 +69,7 @@ function MainMenuState:enter()
 	self.camFollow = {x = 0, y = 0}
 	game.camera:follow(self.camFollow, nil, 10)
 
-	self.versionFormat = "FNF LÖVE v%version\nFriday Night Funkin' v0.3.0"
+	self.versionFormat = "VS Poyo v%version\nMade with FNF LÖVE"
 	self.versionText = Text(12, 0, self.versionFormat:gsub("%%version", Project.version),
 		paths.getFont("vcr.ttf", 16))
 	self.versionText.y = game.height - self.versionText:getHeight() - 8
@@ -155,7 +155,8 @@ local triggerChoices = {
 		game.switchState(StoryMenuState())
 	end},
 	freeplay = {true, function(self)
-		game.switchState(FreeplayState())
+		--game.switchState(FreeplayState())
+		game.switchState(FreeplayPoyo())
 	end},
 	credits = {true, function(self)
 		game.switchState(CreditsState())

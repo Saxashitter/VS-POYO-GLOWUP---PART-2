@@ -12,7 +12,7 @@ function postCreate()
 
 	local chars = {
 		{tag = "p", char = "poyo", side = "left"},
-		{tag = "b", char = "bf-poyo", side = "right"}
+		{tag = "b", char = "poyo", side = "right"}
 	}
 
 	local dialogue = {
@@ -29,17 +29,17 @@ function postCreate()
 		{tag = "p", anim = "scared",   text = "BUT I WANNA WIIIINNNNNNNN"};
 		{tag = "m", anim = "laugh",    text = "talk about desperate"};
 		{tag = "b", anim = "default",  text = "beep"};
-		{tag = "p", anim = "o_o",      text = "."};
-		{tag = "p", anim = "cheer",    text = "YEAAAAAAAAAAAAAAAAAAH"};
+		{tag = "p", anim = "neutral",      text = "."};
+		{tag = "p", anim = "neutral",    text = "YEAAAAAAAAAAAAAAAAAAH"};
 		{tag = "m", anim = "confused", text = "why is poyo so happy over a dude"};
 		{tag = "m", anim = "confused", text = "i thought i was gay"};
 		{tag = "z", anim = "default",  text = "o yea thats bf"};
 		{tag = "z", anim = "default",  text = "hes a very famous singer, he got his bitch from her dad after rapping against a bunch of guys"};
 		{tag = "m", anim = "default",  text = "oh"};
-		{tag = "p", anim = "please",   text = "BF PLEASE SING WITH ME"};
+		{tag = "p", anim = "neutral",   text = "BF PLEASE SING WITH ME"};
 		{tag = "b", anim = "default",  text = "brap"};
 		{tag = "b", anim = "default",  text = "uhhh i mean ok"};
-		{tag = "p", anim = "cheer",    text = "YEAAAAAAAAAH"};
+		{tag = "p", anim = "neutral",    text = "YEAAAAAAAAAH"};
 		{tag = "z", anim = "default",  text = "ill hold the camera"};
 	}
 

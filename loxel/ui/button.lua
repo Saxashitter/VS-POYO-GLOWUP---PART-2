@@ -27,6 +27,8 @@ end
 function Button:update(dt)
 	Button.super.update(self, dt)
 
+	if not self.visible then return end
+
 	local mx, my = game.mouse.x, game.mouse.y
 	self.hovered = (mx >= self.x and mx < self.x + self.width and
 		my >= self.y and my < self.y + self.height)

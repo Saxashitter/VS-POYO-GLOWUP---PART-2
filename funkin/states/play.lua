@@ -49,11 +49,9 @@ local function _returnAllPossibleNotes(type)
 	local count = 0
 
 	for _,n in ipairs(PlayState.SONG.notes[type]) do
-		local sustainTime = n.l or 0
-		--[[if sustainTime == 0 then
+		if n.k ~= "Hurt Note" then
 			count = count + 1
-		end]]
-		count = count + 1
+		end
 	end
 
 	return count
@@ -68,7 +66,7 @@ function PlayState.loadSong(song, diff)
 	return true
 end
 
-function PlayState:new(storyMode, song, diff)
+function PlayState:new(storyMode, song, diff, mods)
 	PlayState.super.new(self)
 
 	if storyMode ~= nil then
@@ -86,13 +84,18 @@ function PlayState:new(storyMode, song, diff)
 			TitleState.new(self)
 		end
 	end
+	
+	self.songName = song and (song:lower()):gsub(" ", "-") or PlayState.SONG.song
+	print(self.songName)
+	
+	PlayState.mods = mods
 end
 
 function PlayState:enter()
 	if PlayState.SONG == nil then PlayState.loadSong('test') end
 	PlayState.SONG.skin = util.getSongSkin(PlayState.SONG)
 
-	local songName = paths.formatToSongPath(PlayState.SONG.song)
+	local songName = paths.formatToSongPath(self.songName)
 
 	local conductor = Conductor():setSong(PlayState.SONG)
 	conductor.time = self.startPos - conductor.crotchet * 5
@@ -136,6 +139,13 @@ function PlayState:enter()
 	self.downScroll = ClientPrefs.data.downScroll
 	self.middleScroll = ClientPrefs.data.middleScroll
 	self.playback = 1
+	if PlayState.mods then
+		if PlayState.mods.fastPlay then
+			self.playback = 1.25
+		elseif PlayState.mods.slowPlay then
+			self.playback = 0.75
+		end
+	end
 	Timer.setSpeed(1)
 
 	self.scripts:set("state", self)
@@ -177,7 +187,6 @@ function PlayState:enter()
 	self.boyfriend = Character(self.stage.boyfriendPos.x,
 		self.stage.boyfriendPos.y, PlayState.SONG.player1,
 		true)
-	self.boyfriend.waitReleaseAfterSing = not ClientPrefs.data.botplayMode
 	self.scripts:add(self.boyfriend.script)
 
 	if self.__speaker then --sorry devs gotta do some SOURCE EDITING
@@ -251,26 +260,58 @@ function PlayState:enter()
 		self.boyfriend, playerVocals, PlayState.SONG.speed)
 	self.enemyNotefield = Notefield(0, y, keys, PlayState.SONG.skin,
 		self.dad, enemyVocals, PlayState.SONG.speed)
-	self.playerNotefield.bot, self.enemyNotefield.bot,
-	self.enemyNotefield.canSpawnSplash = ClientPrefs.data.botplayMode, true, false
+	self.enemyNotefield.canSpawnSplash = false
 	self.playerNotefield.cameras, self.enemyNotefield.cameras = {self.camNotes}, {self.camNotes}
 	self.notefields = {self.playerNotefield, self.enemyNotefield, {character = self.gf}}
+
+
+	self.playerSide = self.playerNotefield
+	self.enemySide = self.enemyNotefield
+	if PlayState.mods
+	and PlayState.mods.leftSide then
+		self.playerSide = self.enemyNotefield
+		self.enemySide = self.playerNotefield
+	end
+
 	self:centerNotefields()
+	
+	self.boyfriend.waitReleaseAfterSing = not ClientPrefs.data.botplayMode and self.playerSide == self.playerNotefield
+	self.dad.waitReleaseAfterSing = not ClientPrefs.data.botplayMode and self.playerSide == self.enemyNotefield
+
+	self.playerNotefield.bot = self.enemySide == self.playerNotefield
+	self.enemyNotefield.bot = self.enemySide == self.enemyNotefield
+
+	local canRandom = self.enemyNotefield ~= self.playerSide
 
 	local _lastNote
 	for _, n in ipairs(PlayState.SONG.notes.enemy) do
-		local note = self:generateNote(self.enemyNotefield, n, true)
-		if _lastNote then
-			-- links for opponent score
-			_lastNote.next = note
-			note.last = _lastNote
-			_lastNote:fixRandom()
+		if canRandom then
+			local note = self:generateNote(self.enemyNotefield, n, true)
+			if _lastNote then
+				-- links for opponent score
+				_lastNote.next = note
+				note.last = _lastNote
+				_lastNote:fixRandom()
+			end
+			_lastNote = note
+		else
+			local note = self:generateNote(self.enemyNotefield, n, nil, n.k)
 		end
-		_lastNote = note
 	end
 	local _lastNote
 	for _, n in ipairs(PlayState.SONG.notes.player) do
-		local note = self:generateNote(self.playerNotefield, n)
+		if not canRandom then
+			local note = self:generateNote(self.playerNotefield, n, true)
+			if _lastNote then
+				-- links for opponent score
+				_lastNote.next = note
+				note.last = _lastNote
+				_lastNote:fixRandom()
+			end
+			_lastNote = note
+		else
+			local note = self:generateNote(self.playerNotefield, n)
+		end
 	end
 	self:add(self.enemyNotefield)
 	self:add(self.playerNotefield)
@@ -404,7 +445,7 @@ function PlayState:enter()
 	end
 	self:positionText()
 
-	if self.storyMode and not PlayState.seenCutscene then
+	if (self.storyMode or PlayState.SONG.sceneInFP) and not PlayState.seenCutscene then
 		PlayState.seenCutscene = true
 
 		local fileExist, cutsceneType
@@ -469,10 +510,10 @@ end
 
 function PlayState:centerNotefields()
 	if self.middleScroll then
-		self.playerNotefield:screenCenter("x")
+		self.playerSide:screenCenter("x")
 
 		for _, notefield in ipairs(self.notefields) do
-			if notefield.is and notefield ~= self.playerNotefield then
+			if notefield.is and notefield ~= self.playerSide then
 				notefield.visible = false
 			end
 		end
@@ -505,7 +546,7 @@ function PlayState:generateNote(notefield, n, rand)
 	if sustainTime > 0 then
 		sustainTime = math.max(sustainTime / 1000, 0.125)
 	end
-	local note = notefield:makeNote(n.t / 1000, n.d % 4, sustainTime)
+	local note = notefield:makeNote(n.t / 1000, n.d % 4, sustainTime, nil, n.k)
 	if rand then
 		note:randomizeHitPos()
 	end
@@ -518,7 +559,6 @@ function PlayState:startCountdown()
 	local event = self.scripts:call("startCountdown")
 	if event == Script.Event_Cancel then return end
 
-	self.playback = ClientPrefs.data.playback
 	Timer.setSpeed(self.playback)
 
 	local vocals
@@ -742,8 +782,6 @@ function PlayState:update(dt)
 			self.startingSong = false
 
 			-- reload playback for countdown skip
-			self.playback = ClientPrefs.data.playback
-			Timer.setSpeed(self.playback)
 
 			local time, vocals = self.startPos / 1000
 			game.sound.music:setPitch(self.playback)
@@ -826,18 +864,20 @@ function PlayState:update(dt)
 					end
 				elseif isPlayer then
 					if noSustainHit
-						and (lastPress or noteTime) <= missOffset then
+						and (lastPress or noteTime) <= missOffset 
+						and not note.damageOnHit then
 						-- miss note
 						self:miss(note)
 					end
-				elseif noteTime <= time then
+				elseif noteTime <= time 
+				and not note.damageOnHit then
 					-- botplay hit
 					self:goodNoteHit(note, time)
 				end
 			end
 
 			if resetVolume then
-				local vocals = notefield.vocals or self.playerNotefield.vocals
+				local vocals = notefield.vocals or self.playerSide.vocals
 				if vocals then vocals:setVolume(ClientPrefs.data.vocalVolume / 100) end
 			end
 		end
@@ -891,7 +931,7 @@ function PlayState:update(dt)
 	end
 
 	if Project.DEBUG_MODE then
-		if game.keys.justPressed.ONE then self.playerNotefield.bot = not self.playerNotefield.bot end
+		if game.keys.justPressed.ONE then self.playerSide.bot = not self.playerSide.bot end
 		if game.keys.justPressed.TWO then self:endSong() end
 		if game.keys.justPressed.THREE then
 			local time, vocals = (PlayState.conductor.time +
@@ -944,22 +984,12 @@ function PlayState:onSettingChange(category, setting)
 			end,
 			["botplayMode"] = function()
 				self.boyfriend.waitReleaseAfterSing = not ClientPrefs.data.botplayMode
-				self.playerNotefield.bot = ClientPrefs.data.botplayMode
+				self.playerSide.bot = ClientPrefs.data.botplayMode
 				self.botplayText.visible = ClientPrefs.data.botplayMode
 			end,
 			["backgroundDim"] = function()
 				self.camHUD.bgColor[4] = ClientPrefs.data.backgroundDim / 100
 			end,
-			["playback"] = function()
-				self.playback = ClientPrefs.data.playback
-				Timer.setSpeed(self.playback)
-				game.sound.music:setPitch(self.playback)
-				local vocals
-				for _, notefield in ipairs(self.notefields) do
-					vocals = notefield.vocals
-					if vocals then vocals:setPitch(self.playback) end
-				end
-			end
 		})
 
 		game.sound.music:setVolume(ClientPrefs.data.musicVolume / 100)
@@ -995,28 +1025,53 @@ function PlayState:goodNoteHit(note, time, blockAnimation)
 		if note.sustain then
 			notefield.lastSustain = note
 		else
-			notefield:removeNote(note)
+			if not note.damageOnHit then
+				notefield:removeNote(note)
+			else
+				self:miss(note)
+				return
+			end
 			notefield.lastSustain = nil
 		end
 
 		if event.unmuteVocals then
-			local vocals = notefield.vocals or self.playerNotefield.vocals
+			local vocals = notefield.vocals or self.playerSide.vocals
 			if vocals then vocals:setVolume(ClientPrefs.data.vocalVolume / 100) end
 		end
 
-		if not event.cancelledAnim and (blockAnimation == nil or not blockAnimation) then
+		if not event.cancelledAnim
+		and (blockAnimation == nil or not blockAnimation)
+		and not note.damageOnHit then
 			local char = notefield.character
 			if char then
 				-- local section, animType = PlayState.SONG.notes[math.max(PlayState.conductor.currentSection + 1, 1)]
 				-- if section and section.altAnim then animType = "alt" end
 				char:sing(dir, animType)
+				if note.heyOnHit then
+					char:play('hey')
+				end
 				if note.sustain then char.strokeTime = -1 end
+			end
+		end
+		
+		if self.playerSide == notefield then
+			self.health = math.min(self.health + 0.023, 2)
+			self.combo = math.max(self.combo, 0) + 1
+			local hitSoundVolume = ClientPrefs.data.hitSound
+			if hitSoundVolume > 0 then
+				game.sound.play(paths.getSound("hitsound"), hitSoundVolume / 100)
 			end
 		end
 
 		local rating = self:getRating(note.time, time)
-		if self.playerNotefield ~= notefield then -- ITS NOT THE PLAYER, FAKE THAT SHIT
+		if self.playerSide ~= notefield then -- ITS NOT THE PLAYER, FAKE THAT SHIT
 			rating = self:getRating(note.time, note.displayTime)
+		end
+
+		if self.playerSide == notefield then
+			self.score = self.score + (rating.score*self.plyrScoreMult)
+		else
+			self.opponentScore = self.opponentScore + (rating.score*self.oppScoreMult)
 		end
 
 		local receptor = notefield.receptors[fixedDir]
@@ -1034,18 +1089,7 @@ function PlayState:goodNoteHit(note, time, blockAnimation)
 			end
 		end
 
-		if self.playerNotefield == notefield then
-			self.health = math.min(self.health + 0.023, 2)
-			self.combo = math.max(self.combo, 0) + 1
-			local hitSoundVolume = ClientPrefs.data.hitSound
-			if hitSoundVolume > 0 then
-				game.sound.play(paths.getSound("hitsound"), hitSoundVolume / 100)
-			end
-			self.score = self.score + (rating.score*self.plyrScoreMult)
-		else
-			self.opponentScore = self.opponentScore + (rating.score*self.oppScoreMult)
-		end
-		self:recalculateRating(rating.name, self.playerNotefield ~= notefield)
+		self:recalculateRating(rating.name, self.enemyNotefield == notefield)
 	end
 
 	self.scripts:call("postGoodNoteHit", note, rating)
@@ -1061,7 +1105,7 @@ function PlayState:goodSustainHit(note, time, fullyHeldSustain)
 	if not event.cancelled and not note.wasGoodSustainHit then
 		note.wasGoodSustainHit = true
 
-		if notefield == self.playerNotefield then
+		if notefield == self.playerSide then
 			--[[ nah
 			if fullScore then
 				self.score = self.score + note.sustainTime * 1000
@@ -1106,7 +1150,7 @@ function PlayState:miss(note, dir)
 		local char = notefield.character
 		if not event.cancelledAnim then char:sing(dir, "miss") end
 
-		if notefield == self.playerNotefield then
+		if notefield == self.playerSide then
 			if not event.cancelledSadGF and self.combo >= 10
 				and self.gf.__animations.sad then
 				self.gf:playAnim("sad", true)
@@ -1117,7 +1161,7 @@ function PlayState:miss(note, dir)
 			self.score, self.misses, self.combo =
 				self.score - 100, self.misses + 1, math.min(self.combo, 0) - 1
 			self:recalculateRating()
-			self:popUpScore()
+			self:popUpScore(nil, self.enemyNotefield == notefield)
 		end
 	end
 
@@ -1139,7 +1183,8 @@ function PlayState:popUpScore(rating, opp)
 	if not event.cancelled then
 		judgeSprites.ratingVisible = not event.hideRating
 		judgeSprites.comboNumVisible = not event.hideScore
-		judgeSprites:spawn(rating, not opp and self.combo or false)
+		local canShowCombo = (not opp and (self.playerSide == self.playerNotefield)) or (opp and (self.playerSide == self.enemyNotefield))
+		judgeSprites:spawn(rating, canShowCombo and self.combo or false)
 	end
 end
 
@@ -1339,10 +1384,10 @@ function PlayState:endSong(skip)
 	self.startedCountdown = false
 	self.boyfriend.waitReleaseAfterSing = false
 
-	if self.storyMode and not PlayState.seenCutscene and not skip then
+	if (self.storyMode or PlayState.SONG.sceneInFP)and not PlayState.seenCutscene and not skip then
 		PlayState.seenCutscene = true
 
-		local songName = paths.formatToSongPath(PlayState.SONG.song)
+		local songName = paths.formatToSongPath(self.songName)
 		local cutscenePaths = {
 			paths.getMods('data/cutscenes/' .. songName .. '-end.lua'),
 			paths.getMods('data/cutscenes/' .. songName .. '-end.json'),
@@ -1426,8 +1471,10 @@ function PlayState:endSong(skip)
 				})
 			end
 
+			local mods = PlayState.mods
 			PlayState.loadSong(PlayState.storyPlaylist[1], PlayState.songDifficulty)
 			game.resetState(true)
+			PlayState.mods = mods
 		else
 			Highscore.saveWeekScore(self.storyWeekFile, self.storyScore, self.songDifficulty)
 			game.switchState(StoryMenuState())
